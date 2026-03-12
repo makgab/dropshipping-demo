@@ -19,8 +19,8 @@
   ```
 
   - browser:
-    - http://localhost:8000
-    - http://localhost:8000/docs
+    - http://localhost:8080
+    - http://localhost:8080/docs
     - http://localhost:5500
 
 
