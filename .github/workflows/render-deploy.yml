@@ -1,6 +1,6 @@
 name: Deploy to Render
 
- 
+# Disabled workflow running
 on:
   workflow_dispatch:
 #  push:
