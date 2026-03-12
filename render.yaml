@@ -1,0 +1,27 @@
+# Render.com yaml
+services:
+  # -----------------------------
+  # BACKEND API (FastAPI)
+  # -----------------------------
+  #- type: web
+  #  name: dropshipping-backend
+  #  runtime: python
+  #  plan: free
+  #  rootDirectory: ""  # repo root
+  #  buildCommand: pip install -r backend/requirements.txt
+  #  startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+  #  envVars:
+  #    - key: PYTHON_VERSION
+  #      value: 3.11
+  - type: web
+    name: dropshipping-backend
+    plan: free
+    rootDirectory: backend
+    dockerfilePath: backend/Dockerfile
+  # -----------------------------
+  # FRONTEND STATIC SITE
+  # -----------------------------
+  - type: static
+    name: dropshipping-frontend
+    rootDirectory: frontend
+    staticPublishPath: .

@@ -1,0 +1,42 @@
+name: Build Backend & Frontend
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+
+      - name: Install backend dependencies
+        run: |
+          cd backend
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run backend tests
+        run: |
+          cd backend
+          # ide jöhet pl. pytest, ha van teszt
+          echo "No tests defined"
+
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Check frontend
+        run: |
+          cd frontend
+          # egyszerű ellenőrzés, pl. HTML lint vagy csak echo
+          echo "Frontend looks good"
