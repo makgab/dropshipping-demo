@@ -36,7 +36,7 @@ pre {
 
 <body>
 
-<h2>Dropshipping Profit Calculator (2026-03-03)</h2>
+<h2>Dropshipping Profit Calculator (2026-03-12)</h2>
 
 <label>Purchase price (supplier)</label>
 <input id="purchase_price" type="number" step="0.01" value="10">
@@ -72,7 +72,7 @@ async function calculate() {
   console.log("Sending:", data);
 
   try {
-    const response = await fetch("https://dropshipping-demo-backend.onrender.com/calculate_profit", {
+    const response = await fetch("https://dropshipping-backend-472931103864.europe-west1.run.app/calculate_profit", {
           method: "POST",
           headers: {"Content-Type": "application/json"},
           body: JSON.stringify(data)
