@@ -27,7 +27,7 @@ class ProfitRequest(BaseModel):
 def root():
     return {"status": "ok", "service": "dropshipping-demo"}
 
-@app.post("/calculate_profit")
+@app.post("/api/calculate_profit")
 def calc(data: ProfitRequest):
     total_cost = data.price + data.shipping + data.import_vat + data.fee
     profit = data.sales_price - total_cost
