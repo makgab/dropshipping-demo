@@ -16,6 +16,9 @@ firestore.*
 backend/*.json
 frontend/*.json
 
+# python cache
+*pycache*
+
 # Runtime data
 pids
 *.pid

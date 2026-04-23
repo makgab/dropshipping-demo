@@ -177,6 +177,7 @@
 
       # get an url: https://dropshipping-api-xxxx.a.run.app
       in backend: fetch("https://dropshipping-api-xxxx.a.run.app/calculate_profit", { ... })
+      in frontend: https://dropshipping-demo.web.app
 
 ```
 
