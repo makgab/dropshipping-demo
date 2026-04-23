@@ -171,7 +171,10 @@
       gcloud services enable run.googleapis.com
       gcloud services enable artifactregistry.googleapis.com
       gcloud services enable containerregistry.googleapis.com
+
       gcloud run deploy dropshipping-api --source .
+      # gcloud run deploy dropshipping-backend --source backend --region europe-west1 --allow-unauthenticated
+
       # get an url: https://dropshipping-api-xxxx.a.run.app
       in backend: fetch("https://dropshipping-api-xxxx.a.run.app/calculate_profit", { ... })
 
