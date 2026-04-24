@@ -16,33 +16,87 @@ const auth = firebase.auth();
 
 let currentToken = null;
 
-// LOGIN
+// UI helpers
+function showApp(user) {
+    document.getElementById("authSection").style.display = "none";
+    document.getElementById("appSection").style.display = "block";
+    document.getElementById("userEmail").innerText = "Logged in as: " + user.email;
+}
+
+function showLogin() {
+    document.getElementById("authSection").style.display = "block";
+    document.getElementById("appSection").style.display = "none";
+}
+
+// 🔥 AUTO LOGIN (legfontosabb)
+auth.onAuthStateChanged(async (user) => {
+    console.log("Auth state:", user);
+    console.log("LOGIN SUCCESS");
+    if (user) {
+        currentToken = await user.getIdToken();
+        showApp(user);
+    } else {
+        currentToken = null;
+        showLogin();
+    }
+});
+
+// 🔐 EMAIL LOGIN
 document.getElementById("loginBtn").onclick = async () => {
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+    const email = emailInput();
+    const password = passwordInput();
 
     try {
         const userCredential = await auth.signInWithEmailAndPassword(email, password);
+
         currentToken = await userCredential.user.getIdToken();
 
-        document.getElementById("loginStatus").innerText = "Logged in";
-        document.getElementById("calcBtn").disabled = false;
+        showApp(userCredential.user); // 🔥 EZ HIÁNYZIK
 
     } catch (err) {
-        document.getElementById("loginStatus").innerText = "Login failed: " + err.message;
+        alert(err.message);
     }
 };
 
-// LOGOUT
-document.getElementById("logoutBtn").onclick = async () => {
-    await auth.signOut();
-    currentToken = null;
+// 🆕 REGISTER
+document.getElementById("registerBtn").onclick = async () => {
+    const email = emailInput();
+    const password = passwordInput();
 
-    document.getElementById("loginStatus").innerText = "Logged out";
-    document.getElementById("calcBtn").disabled = true;
+    try {
+        const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+
+        currentToken = await userCredential.user.getIdToken();
+
+        showApp(userCredential.user); // 🔥 EZ IS KELL
+
+    } catch (err) {
+        alert(err.message);
+    }
 };
 
-// CALCULATE
+// 🔵 GOOGLE LOGIN
+document.getElementById("googleBtn").onclick = async () => {
+    const provider = new firebase.auth.GoogleAuthProvider();
+
+    try {
+        const result = await auth.signInWithPopup(provider);
+
+        currentToken = await result.user.getIdToken();
+
+        showApp(result.user); // 🔥 EZ IS
+
+    } catch (err) {
+        alert(err.message);
+    }
+};
+
+// 🚪 LOGOUT
+document.getElementById("logoutBtn").onclick = async () => {
+    await auth.signOut();
+};
+
+// 📊 CALCULATE
 document.getElementById("calcBtn").onclick = async () => {
 
     if (!currentToken) {
@@ -51,11 +105,11 @@ document.getElementById("calcBtn").onclick = async () => {
     }
 
     const data = {
-        price: Number(document.getElementById("purchase_price").value),
-        shipping: Number(document.getElementById("shipping_cost").value),
-        import_vat: Number(document.getElementById("import_vat").value),
-        fee: Number(document.getElementById("marketplace_fee").value),
-        sales_price: Number(document.getElementById("sale_price").value)
+        price: num("purchase_price"),
+        shipping: num("shipping_cost"),
+        import_vat: num("import_vat"),
+        fee: num("marketplace_fee"),
+        sales_price: num("sale_price")
     };
 
     try {
@@ -69,17 +123,29 @@ document.getElementById("calcBtn").onclick = async () => {
         });
 
         if (!response.ok) {
-            const txt = await response.text();
-            throw new Error(txt);
+            throw new Error(await response.text());
         }
 
         const result = await response.json();
 
         document.getElementById("result").textContent =
-            `Profit: ${result.profit}
+`Profit: ${result.profit}
 Margin: ${result.margin_percent.toFixed(2)}%`;
 
     } catch (err) {
         document.getElementById("result").textContent = "ERROR: " + err.message;
     }
 };
+
+// helpers
+function num(id) {
+    return Number(document.getElementById(id).value);
+}
+
+function emailInput() {
+    return document.getElementById("email").value;
+}
+
+function passwordInput() {
+    return document.getElementById("password").value;
+}

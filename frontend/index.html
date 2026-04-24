@@ -3,28 +3,39 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Dropshipping Profit Calculator</title>
+<title>Dropshipping Calculator</title>
 
 <style>
 body {
-  font-family: Arial, sans-serif;
-  max-width: 600px;
+  font-family: Arial;
+  max-width: 500px;
   margin: 40px auto;
 }
+
 input, button {
-  padding: 8px;
-  margin: 5px 0;
   width: 100%;
+  padding: 10px;
+  margin: 5px 0;
 }
+
 button {
   background: #a30f0f;
   color: white;
   border: none;
   cursor: pointer;
 }
+
 button:hover {
   opacity: 0.9;
 }
+
+.card {
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
 pre {
   background: #111;
   color: #0f0;
@@ -32,7 +43,7 @@ pre {
 }
 </style>
 
-<!-- Firebase SDK -->
+<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
 
@@ -40,42 +51,54 @@ pre {
 
 <body>
 
-<h2>Dropshipping Profit Calculator (2026-04-24)</h2>
+<h2>Dropshipping Calculator (2026-04-24g)</h2>
 
-<h3>Login</h3>
+<!-- LOGIN -->
+<div id="authSection" class="card">
 
-<input id="email" placeholder="Email">
-<input id="password" type="password" placeholder="Password">
+  <h3>Login</h3>
 
-<button id="loginBtn">Login</button>
-<button id="logoutBtn">Logout</button>
+  <input id="email" placeholder="Email">
+  <input id="password" type="password" placeholder="Password">
 
-<div id="loginStatus">Not logged in</div>
+  <button id="loginBtn">Login</button>
+  <button id="registerBtn">Register</button>
+  <button id="googleBtn">Login with Google</button>
 
-<hr>
+  <div id="loginStatus">Not logged in</div>
 
-<h3>Calculator</h3>
+</div>
 
-<label>Purchase price</label>
-<input id="purchase_price" type="number" value="10">
+<!-- APP -->
+<div id="appSection" class="card" style="display:none;">
 
-<label>Shipping</label>
-<input id="shipping_cost" type="number" value="5">
+  <h3 id="userEmail"></h3>
 
-<label>Import VAT</label>
-<input id="import_vat" type="number" value="2">
+  <button id="logoutBtn">Logout</button>
 
-<label>Marketplace fee</label>
-<input id="marketplace_fee" type="number" value="3">
+  <hr>
 
-<label>Sale price</label>
-<input id="sale_price" type="number" value="30">
+  <label>Purchase price</label>
+  <input id="purchase_price" type="number" value="10">
 
-<button id="calcBtn" disabled>Calculate</button>
+  <label>Shipping</label>
+  <input id="shipping_cost" type="number" value="5">
 
-<pre id="result">---</pre>
+  <label>Import VAT</label>
+  <input id="import_vat" type="number" value="2">
 
-<!-- Script a végén -->
+  <label>Marketplace fee</label>
+  <input id="marketplace_fee" type="number" value="3">
+
+  <label>Sale price</label>
+  <input id="sale_price" type="number" value="30">
+
+  <button id="calcBtn">Calculate</button>
+
+  <pre id="result">---</pre>
+
+</div>
+
 <script src="script.js"></script>
 
 </body>
