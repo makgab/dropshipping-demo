@@ -29,78 +29,54 @@ pre {
   background: #111;
   color: #0f0;
   padding: 10px;
-  min-height: 50px;
 }
 </style>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+
 </head>
 
 <body>
 
-<h2>Dropshipping Profit Calculator (2026-04-23)</h2>
+<h2>Dropshipping Profit Calculator (2026-04-24)</h2>
 
-<label>Purchase price (supplier)</label>
-<input id="purchase_price" type="number" step="0.01" value="10">
+<h3>Login</h3>
 
-<label>Shipping cost</label>
-<input id="shipping_cost" type="number" step="0.01" value="5">
+<input id="email" placeholder="Email">
+<input id="password" type="password" placeholder="Password">
+
+<button id="loginBtn">Login</button>
+<button id="logoutBtn">Logout</button>
+
+<div id="loginStatus">Not logged in</div>
+
+<hr>
+
+<h3>Calculator</h3>
+
+<label>Purchase price</label>
+<input id="purchase_price" type="number" value="10">
+
+<label>Shipping</label>
+<input id="shipping_cost" type="number" value="5">
 
 <label>Import VAT</label>
-<input id="import_vat" type="number" step="0.01" value="2">
+<input id="import_vat" type="number" value="2">
 
 <label>Marketplace fee</label>
-<input id="marketplace_fee" type="number" step="0.01" value="3">
+<input id="marketplace_fee" type="number" value="3">
 
 <label>Sale price</label>
-<input id="sale_price" type="number" step="0.01" value="30">
+<input id="sale_price" type="number" value="30">
 
-<button onclick="calculate()">Calculate</button>
+<button id="calcBtn" disabled>Calculate</button>
 
-<h3>Result:</h3>
 <pre id="result">---</pre>
 
-<script>
-async function calculate() {
-
-  const data = {
-    price: Number(document.getElementById("purchase_price").value),
-    shipping: Number(document.getElementById("shipping_cost").value),
-    import_vat: Number(document.getElementById("import_vat").value),
-    fee: Number(document.getElementById("marketplace_fee").value),
-    sales_price: Number(document.getElementById("sale_price").value)
-  };
-
-  console.log("Sending:", data);
-
-  try {
-    <!-- const response = await fetch("https://dropshipping-backend-472931103864.europe-west1.run.app/calculate_profit", { -->
-      const response = await fetch("/api/v1/calculate_profit", {
-          method: "POST",
-          headers: {"Content-Type": "application/json"},
-          body: JSON.stringify(data)
-        });
-
-    if (!response.ok) {
-      const txt = await response.text();
-      throw new Error(txt);
-    }
-
-    const result = await response.json();
-    console.log("API result:", result);
-
-    // SAFE parse
-    const profit = Number(result.profit || 0);
-    const margin = Number(result.profit_margin || 0);
-
-    document.getElementById("result").textContent =
-      `Profit: ${result.profit}
-      Margin %: ${result.margin_percent}`;
-
-  } catch (err) {
-    document.getElementById("result").textContent = "ERROR: " + err.message;
-    console.error(err);
-  }
-}
-</script>
+<!-- Script a végén -->
+<script src="script.js"></script>
 
 </body>
 </html>

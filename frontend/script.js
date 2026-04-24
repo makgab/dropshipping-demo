@@ -10,53 +10,76 @@ const firebaseConfig = {
     appId: "1:472931103864:web:c4cf49d721929474c8698d"
 };
 
+
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 
 let currentToken = null;
 
-// --- Login ---
-document.getElementById('loginBtn').onclick = async () => {
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
+// LOGIN
+document.getElementById("loginBtn").onclick = async () => {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
     try {
         const userCredential = await auth.signInWithEmailAndPassword(email, password);
         currentToken = await userCredential.user.getIdToken();
-        document.getElementById('loginStatus').innerText = "Logged in!";
-        document.getElementById('calcBtn').disabled = false;
+
+        document.getElementById("loginStatus").innerText = "Logged in";
+        document.getElementById("calcBtn").disabled = false;
+
     } catch (err) {
-        document.getElementById('loginStatus').innerText = "Login failed: " + err.message;
+        document.getElementById("loginStatus").innerText = "Login failed: " + err.message;
     }
 };
 
-// --- Calculate button ---
-document.getElementById('calcBtn').onclick = async () => {
+// LOGOUT
+document.getElementById("logoutBtn").onclick = async () => {
+    await auth.signOut();
+    currentToken = null;
+
+    document.getElementById("loginStatus").innerText = "Logged out";
+    document.getElementById("calcBtn").disabled = true;
+};
+
+// CALCULATE
+document.getElementById("calcBtn").onclick = async () => {
+
     if (!currentToken) {
         alert("Login first");
         return;
     }
 
     const data = {
-        purchase_price: parseFloat(document.getElementById('purchase_price').value),
-        shipping_cost: parseFloat(document.getElementById('shipping_cost').value),
-        import_vat: parseFloat(document.getElementById('import_vat').value),
-        marketplace_fee: parseFloat(document.getElementById('marketplace_fee').value),
-        sale_price: parseFloat(document.getElementById('sale_price').value)
+        price: Number(document.getElementById("purchase_price").value),
+        shipping: Number(document.getElementById("shipping_cost").value),
+        import_vat: Number(document.getElementById("import_vat").value),
+        fee: Number(document.getElementById("marketplace_fee").value),
+        sales_price: Number(document.getElementById("sale_price").value)
     };
 
     try {
-        const response = await fetch('http://localhost:8000/calculate_profit', {
-            method: 'POST',
+        const response = await fetch("/api/v1/calculate_profit", {
+            method: "POST",
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + currentToken
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + currentToken
             },
             body: JSON.stringify(data)
         });
+
+        if (!response.ok) {
+            const txt = await response.text();
+            throw new Error(txt);
+        }
+
         const result = await response.json();
-        document.getElementById('result').innerText =
-            `Profit: ${result.profit}, Margin: ${result.profit_margin.toFixed(2)}%`;
+
+        document.getElementById("result").textContent =
+            `Profit: ${result.profit}
+Margin: ${result.margin_percent.toFixed(2)}%`;
+
     } catch (err) {
-        alert("Calculation failed: " + err.message);
+        document.getElementById("result").textContent = "ERROR: " + err.message;
     }
 };
