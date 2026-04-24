@@ -51,7 +51,7 @@ document.getElementById("loginBtn").onclick = async () => {
 
         currentToken = await userCredential.user.getIdToken();
 
-        showApp(userCredential.user); // 🔥 EZ HIÁNYZIK
+        showApp(userCredential.user); // showApp
 
     } catch (err) {
         alert(err.message);
@@ -68,7 +68,7 @@ document.getElementById("registerBtn").onclick = async () => {
 
         currentToken = await userCredential.user.getIdToken();
 
-        showApp(userCredential.user); // 🔥 EZ IS KELL
+        showApp(userCredential.user); // showApp
 
     } catch (err) {
         alert(err.message);
@@ -84,7 +84,7 @@ document.getElementById("googleBtn").onclick = async () => {
 
         currentToken = await result.user.getIdToken();
 
-        showApp(result.user); // 🔥 EZ IS
+        showApp(result.user);
 
     } catch (err) {
         alert(err.message);
@@ -94,6 +94,8 @@ document.getElementById("googleBtn").onclick = async () => {
 // 🚪 LOGOUT
 document.getElementById("logoutBtn").onclick = async () => {
     await auth.signOut();
+        currentToken = null;
+        showLogin(); 
 };
 
 // 📊 CALCULATE
