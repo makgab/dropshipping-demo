@@ -139,6 +139,51 @@ Margin: ${result.margin_percent.toFixed(2)}%`;
     }
 };
 
+// load history
+document.getElementById("loadBtn").onclick = async () => {
+
+    if (!currentToken) {
+        alert("Login first");
+        return;
+    }
+
+    try {
+        
+        const response = await fetch("/api/v1/my_calculations", {
+            headers: {
+                "Authorization": "Bearer " + currentToken
+            }
+        });
+
+        // 🔥 NEM json() azonnal!
+        const text = await response.text();
+
+        console.log("RAW RESPONSE:", text); // 🔥 EZ A LÉNYEG
+
+        if (!response.ok) {
+            throw new Error(text);
+        }
+
+        // csak ha már tudjuk, hogy JSON
+        const data = JSON.parse(text);
+
+        const list = document.getElementById("history");
+        list.innerHTML = "";
+
+        data.forEach(item => {
+            const li = document.createElement("li");
+
+            li.textContent =
+                `Profit: ${item.profit} | Margin: ${item.margin_percent.toFixed(2)}%`;
+
+            list.appendChild(li);
+        });
+
+    } catch (err) {
+        alert(err.message);
+    }
+};
+
 // helpers
 function num(id) {
     return Number(document.getElementById(id).value);

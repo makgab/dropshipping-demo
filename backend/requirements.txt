@@ -1,6 +1,5 @@
 fastapi==0.111.0
 uvicorn[standard]==0.23.1
-requests==2.32.5
-python-multipart>=0.0.7
 firebase-admin>=6.2.0
-
+google-cloud-firestore
+python-multipart>=0.0.7
